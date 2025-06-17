@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:lol_app/app/utils/colors_app.dart';
-
 import 'package:lol_app/domain/models/champion_detail_data_model.dart';
 
 import 'detail_modal_ability_image_content.dart';
@@ -17,18 +15,19 @@ class ModalAbilitieContent extends StatelessWidget {
     required this.champion,
     required this.index,
   });
+
   final int index;
   final Champion? champion;
 
   @override
   Widget build(BuildContext context) {
+    assert(champion != null, 'Champion cannot be null');
+    final spell = champion!.spells![index];
+
     return Container(
       height: 320.h,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        vertical: 20,
-        horizontal: 35,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 35),
       decoration: BoxDecoration(
         color: ColorsApp.primaryColor,
         borderRadius: const BorderRadius.only(
@@ -37,35 +36,25 @@ class ModalAbilitieContent extends StatelessWidget {
         ),
       ),
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Stack(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 8,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImageAbilitieContent(
-                      id: champion!.spells![index].id,
-                    ),
-                    const SizedBox(width: 10),
-                    NameAbilityModalContent(
-                      spell: champion!.spells![index],
-                    )
+                    ImageAbilitieContent(id: spell.id),
+                    NameAbilityModalContent(spell: spell),
                   ],
                 ),
-                DescriptionAbilityModalContent(
-                  spell: champion!.spells![index],
-                ),
-                ToolTipAbilityModalContent(
-                  spell: champion!.spells![index],
-                )
+                DescriptionAbilityModalContent(spell: spell),
+                ToolTipAbilityModalContent(spell: spell),
               ],
             ),
-            const IconCloseModalAbilities()
+            const IconCloseModalAbilities(),
           ],
         ),
       ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:lol_app/presentation/widgets/custom_button.dart';
+import 'package:lol_app/presentation/widgets/tween_aniamtion.dart';
 
 import 'field_bottom_content.dart';
 
@@ -13,41 +11,42 @@ class SearchChampionContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      tween: Tween(begin: 1.0, end: 0.0),
+    return TweenAnimationWidget(
+      direction: AnimationDirection.top,
       duration: const Duration(milliseconds: 450),
-      builder: (context, value, child) => Transform.translate(
-        offset: Offset(0.0, -300 * value),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-          child: Container(
-            height: 120,
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double maxWidth =
+              constraints.maxWidth > 600 ? 600 : double.infinity;
+
+          return Align(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Container(
+                height: 120,
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const FieldBottomSheetContent(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ButtonButtomWidget(
+                        icon: const Icon(Icons.search),
+                        height: 52,
+                        decorated: false,
+                        onTap: () {
+                          // search code here
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-            child: Stack(
-              children: [
-                const FieldBottomSheetContent(),
-                Positioned(
-                  right: 1,
-                  top: 6.h,
-                  child: ButtonButtomWidget(
-                    icon: const Icon(Icons.search),
-                    height: 45,
-                    decorated: false,
-                    onTap: () {
-                      //sarch code here
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

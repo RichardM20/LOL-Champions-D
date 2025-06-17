@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lol_app/app/utils/font_app.dart';
 import 'package:lol_app/domain/models/champion_detail_data_model.dart';
 
@@ -21,7 +20,7 @@ class ToolTipAbilityModalContent extends StatelessWidget {
             text: "\nTooltip: ",
             style: TextStyle(
               fontFamily: FontFamilyApp.bold,
-              fontSize: 15.spMin,
+              fontSize: 15,
             ),
           ),
           TextSpan(
@@ -29,7 +28,7 @@ class ToolTipAbilityModalContent extends StatelessWidget {
             style: TextStyle(
               overflow: TextOverflow.clip,
               fontFamily: FontFamilyApp.medium,
-              fontSize: 15.spMin,
+              fontSize: 15,
             ),
           )
         ],

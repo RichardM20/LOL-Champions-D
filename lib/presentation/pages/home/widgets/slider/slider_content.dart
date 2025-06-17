@@ -1,15 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:lol_app/app/utils/font_app.dart';
+import 'package:lol_app/app/utils/responsive.dart';
+import 'package:lol_app/domain/models/breakpoint.dart';
 import 'package:lol_app/domain/models/champions_data_model.dart';
+import 'package:lol_app/presentation/pages/home/widgets/slider/slider_card_content.dart';
+import 'package:lol_app/presentation/pages/home/widgets/slider/slider_empty_state.dart';
 
-import 'package:lol_app/presentation/pages/home/widgets/slider/slider_image_content.dart';
-
-import 'slider_bottom_content.dart';
-
-// ignore: must_be_immutable
 class SliderContent extends StatefulWidget {
   const SliderContent({super.key, required this.championList});
   final List<ChampionData> championList;
@@ -23,90 +19,94 @@ class _SliderContentState extends State<SliderContent> {
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      tween: Tween(begin: 1.0, end: 0.0),
-      duration: const Duration(milliseconds: 450),
-      builder: (context, value, child) => Transform.translate(
-          offset: Offset(0.0, 200 * value),
-          child: widget.championList.isEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Data not found",
-                            style: TextStyle(
-                              fontFamily: FontFamilyApp.bold,
-                            ),
-                          ),
-                          const TextSpan(
-                            text: " ):",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              : PageView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: widget.championList.length,
-                  onPageChanged: (val) {
-                    setState(() {
-                      selectedIndex = val;
-                    });
-                  },
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final champion = widget.championList[index];
-                    final scale = selectedIndex == index ? 1.0 : 0.8;
-                    return TweenAnimationBuilder(
-                      curve: Curves.decelerate,
-                      duration: const Duration(milliseconds: 250),
-                      tween: Tween(begin: scale, end: scale),
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 50,
-                          left: 30.w,
-                          right: 30.w,
-                        ),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SliderTopImageContent(
-                                        championId: champion.id!),
-                                    SliderBottomContent(
-                                      championId: champion.id!,
-                                      championName: champion.name ?? "",
-                                      championType: champion.tags!.toString(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      builder: (context, value, child) {
-                        return Transform.scale(
-                          scale: scale,
-                          child: child,
-                        );
-                      },
-                    );
-                  },
-                )),
+    return widget.championList.isEmpty
+        ? const SliderEmptyState()
+        : _SliderPageView(
+            championList: widget.championList,
+            selectedIndex: selectedIndex,
+            onPageChanged: (val) => setState(() => selectedIndex = val),
+          );
+  }
+}
+
+class _SliderPageView extends StatefulWidget {
+  final List<ChampionData> championList;
+  final int selectedIndex;
+  final ValueChanged<int> onPageChanged;
+
+  const _SliderPageView({
+    required this.championList,
+    required this.selectedIndex,
+    required this.onPageChanged,
+  });
+
+  @override
+  State<_SliderPageView> createState() => _SliderPageViewState();
+}
+
+class _SliderPageViewState extends State<_SliderPageView> {
+  late PageController _controller;
+  late BreakpointConfig _config;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController();
+  }
+
+  void _handlePointerSignal(PointerSignalEvent event) {
+    if (event is PointerScrollEvent) {
+      final delta = event.scrollDelta.dy;
+
+      if (delta > 0) {
+        _controller.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      } else if (delta < 0) {
+        _controller.previousPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _config = ResponsiveUtils.getConfig(constraints.maxWidth);
+
+        _controller = PageController(viewportFraction: _config.viewport);
+
+        return Listener(
+          onPointerSignal: _handlePointerSignal,
+          child: PageView.builder(
+            controller: _controller,
+            physics: const BouncingScrollPhysics(),
+            padEnds: constraints.maxWidth < 600,
+            itemCount: widget.championList.length,
+            onPageChanged: widget.onPageChanged,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final champion = widget.championList[index];
+              final scale = widget.selectedIndex == index ? 1.0 : _config.scale;
+              return SliderCard(
+                champion: champion,
+                scale: scale,
+                config: _config,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

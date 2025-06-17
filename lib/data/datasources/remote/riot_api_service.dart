@@ -14,7 +14,7 @@ class RiotApiService {
         'Content-Type': 'application/json',
       },
     );
-    //verificacion de la respuesta
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       final responseData = jsonDecode(response.body);
       final List<ChampionData> championsData = [];

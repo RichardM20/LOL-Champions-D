@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lol_app/app/utils/colors_app.dart';
 import 'package:lol_app/app/utils/font_app.dart';
 
@@ -16,7 +15,7 @@ class CarouselTextSkinNameContent extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: ColorsApp.secondaryColor.withOpacity(0.5),
+        color: ColorsApp.secondaryColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
@@ -24,7 +23,7 @@ class CarouselTextSkinNameContent extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: FontFamilyApp.regular,
-          fontSize: 15.spMin,
+          fontSize: 15,
         ),
       ),
     );

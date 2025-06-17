@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 class ScaleAnimationWidget extends StatefulWidget {
   const ScaleAnimationWidget(
-      {super.key, required this.widget, required this.duration});
+      {
+    super.key,
+    required this.widget,
+    required this.duration,
+  });
   final Widget widget;
   final int duration;
+
   @override
-  _ScaleAnimationWidgetState createState() => _ScaleAnimationWidgetState();
+  State<ScaleAnimationWidget> createState() => _ScaleAnimationWidgetState();
 }
 
 class _ScaleAnimationWidgetState extends State<ScaleAnimationWidget>

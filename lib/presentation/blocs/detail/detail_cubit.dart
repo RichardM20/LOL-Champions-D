@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lol_app/data/models/data_state.dart';
 import 'package:lol_app/domain/usecases/riot_api_usecase.dart';
@@ -16,6 +14,7 @@ class DetailPageCubit extends Cubit<DetailState> {
             requestState: ChampionDetailState.initial,
           ),
         );
+        
   getDetailChampion({String? championName}) async {
     resetLoading();
     startLoading();

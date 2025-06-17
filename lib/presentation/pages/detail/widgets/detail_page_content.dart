@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'detail/detail_stadistic_section_content.dart';
-import 'skins_section/detail_skin_section_content.dart';
 import 'detail/detail_abiliti_section_content.dart';
 import 'detail/detail_about_section_content.dart';
-
+import 'detail/detail_stadistic_section_content.dart';
 import 'detail/detail_top_content.dart';
+import 'skins_section/detail_skin_section_content.dart';
 
 class DetailPageContent extends StatefulWidget {
   const DetailPageContent({super.key});

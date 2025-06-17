@@ -13,16 +13,16 @@ class IconCloseModalAbilities extends StatelessWidget {
       top: 5,
       child: GestureDetector(
         onTap: () => GoRouter.of(context).pop(),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: Colors.white.withOpacity(
-              0.06,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: Colors.white.withValues(
+                alpha: 0.06,
+              ),
             ),
-          ),
-          child: Transform.translate(
-            offset: const Offset(0.0, 0.0),
             child: const Icon(
               Icons.keyboard_arrow_down_rounded,
             ),

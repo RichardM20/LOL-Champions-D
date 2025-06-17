@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:lol_app/app/utils/colors_app.dart';
 
 String diff(int v) {
-  return v <= 4
-      ? "Easy"
-      : v > 4 && v <= 7
-          ? "Moderate"
-          : "Hard";
+  if (v <= 4) return "Easy";
+  if (v <= 7) return "Moderate";
+  return "Hard";
 }
 
 Color diffColor(int v, int index) {
-  return v <= 4 && index < 1
-      ? ColorsApp.secondaryColor
-      : v > 4 && v <= 7 && index <= 1
-          ? Colors.amber
-          : v >= 8 && index <= 2
-              ? Colors.red
-              : ColorsApp.secondaryColorDark;
+  if (v <= 4 && index < 1) {
+    return ColorsApp.secondaryColor;
+  } else if (v <= 7 && index <= 1) {
+    return Colors.amber;
+  } else if (v >= 8 && index <= 2) {
+    return Colors.red;
+  }
+  return ColorsApp.secondaryColorDark;
 }

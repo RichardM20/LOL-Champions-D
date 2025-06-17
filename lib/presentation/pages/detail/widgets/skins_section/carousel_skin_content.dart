@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lol_app/app/utils/colors_app.dart';
 import 'package:lol_app/app/utils/env.dart';
-import 'package:lol_app/app/utils/font_app.dart';
-import 'package:lol_app/domain/models/champion_detail_data_model.dart';
 import 'package:lol_app/presentation/blocs/detail/detail_cubit.dart';
+import 'package:lol_app/presentation/widgets/image_loading.dart';
 
 import 'carousel_name_skin_content.dart';
 
 class CarouselSkinContent extends StatelessWidget {
-  const CarouselSkinContent({super.key, required this.pageController});
+  const CarouselSkinContent({
+    super.key,
+    required this.pageController,
+    required this.maxWidth,
+  });
+
   final PageController pageController;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<DetailPageCubit>();
+    final champion = cubit.state.championDetail!;
+
     return SizedBox(
       height: 200,
       child: PageView.builder(
@@ -24,32 +29,80 @@ class CarouselSkinContent extends StatelessWidget {
           cubit.changeIndexPage(page);
         },
         controller: pageController,
-        itemCount: cubit.state.championDetail!.skins!.length,
+        padEnds: maxWidth < 600,
+        itemCount: champion.skins!.length,
         itemBuilder: (context, index) {
-          final champion = cubit.state.championDetail!;
-          return Stack(
-            children: [
-              Center(
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/img/circle-loading.gif',
-                  placeholderFit: BoxFit.contain,
-                  image:
-                      "${Environment.imageApi}${champion.id}_${champion.skins![index].num}.jpg",
-                  fit: BoxFit.fill,
-                  width: double.infinity,
+          final skin = champion.skins![index];
+          final imageUrl = '${Environment.imageApi}${champion.id}_${skin.num}';
+
+          return Container(
+            height: 400,
+            width: 300,
+            margin: const EdgeInsets.only(right: 24),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 300),
+                        pageBuilder: (_, __, ___) =>
+                            _FullScreenImageView(imageUrl: imageUrl),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: imageUrl,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: ImageLoading(imageUrl: imageUrl),
+                    ),
+                  ),
                 ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 50,
-                right: 50,
-                child: CarouselTextSkinNameContent(
-                  skinName: champion.skins![index].name ?? "",
+                Positioned(
+                  bottom: 20,
+                  left: 50,
+                  right: 50,
+                  child: CarouselTextSkinNameContent(
+                    skinName: skin.name ?? "",
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _FullScreenImageView extends StatelessWidget {
+  const _FullScreenImageView({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          Center(
+            child: Hero(
+              tag: imageUrl,
+              child: ImageLoading(imageUrl: imageUrl),
+            ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lol_app/app/utils/colors_app.dart';
 import 'package:lol_app/app/utils/font_app.dart';
-
 import 'package:lol_app/presentation/blocs/detail/detail_cubit.dart';
+import 'package:lol_app/presentation/widgets/tween_aniamtion.dart';
 
 class StatisticsChampionContent extends StatelessWidget {
   const StatisticsChampionContent({super.key});
@@ -19,7 +19,7 @@ class StatisticsChampionContent extends StatelessWidget {
           "Statistics",
           style: TextStyle(
             fontFamily: FontFamilyApp.bold,
-            fontSize: 15.spMin,
+            fontSize: 15,
             color: Colors.white,
           ),
         ),
@@ -68,47 +68,44 @@ class StatictisGeneralContent extends StatelessWidget {
       children: [
         Expanded(
           flex: 1,
-          child: TweenAnimationBuilder(
-            tween: Tween(begin: 1.0, end: 0.0),
+          child: TweenAnimationWidget(
+            direction: AnimationDirection.left,
             duration: const Duration(milliseconds: 350),
-            builder: (context, value, child) => Transform.translate(
-              offset: Offset(-30 * value, 0.0),
-              child: Row(
-                children: [
-                  Text(
-                    "$label: \t\t",
-                    overflow: TextOverflow.ellipsis,
+            child: Row(
+              children: [
+                Text(
+                  "$label: \t\t",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: FontFamilyApp.medium,
+                    fontSize: 15,
+                    height: 1.5,
+                    color: Colors.white,
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    '$v',
                     style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
                       fontFamily: FontFamilyApp.medium,
-                      fontSize: 15.spMin,
+                      fontSize: 15,
                       height: 1.5,
                       color: Colors.white,
                     ),
                   ),
-                  Flexible(
-                    child: Text(
-                      '$v',
-                      style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontFamily: FontFamilyApp.medium,
-                        fontSize: 15.spMin,
-                        height: 1.5,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
         Expanded(
           flex: 2,
-          child: TweenAnimationBuilder(
-            tween: Tween(begin: 1.0, end: 0.0),
+          child: TweenAnimationWidget(
+            direction: AnimationDirection.right,
             duration: const Duration(milliseconds: 350),
-            builder: (context, value, child) => Transform.translate(
-              offset: Offset(30 * value, 0.0),
+            child: SizedBox(
+              width: 600,
               child: StatisticsPorcentContent(
                 color: color,
                 value: v,

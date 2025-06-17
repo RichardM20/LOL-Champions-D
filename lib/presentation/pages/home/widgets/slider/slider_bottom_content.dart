@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'slider_button_content.dart';
 import 'slider_info_text_content.dart';
@@ -20,7 +19,7 @@ class SliderBottomContent extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 38.h, horizontal: 15.w),
+          padding: EdgeInsets.symmetric(vertical: 38, horizontal: 15),
           color: Colors.white,
           width: double.infinity,
         ),
@@ -35,7 +34,7 @@ class SliderBottomContent extends StatelessWidget {
           top: 22,
           left: 20,
           child: SliderTextBottomInfo(
-            championNamel: championName,
+            championName: championName,
             championType: championType,
           ),
         ),

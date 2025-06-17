@@ -54,11 +54,19 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(requestState: ChampionsRequestState.initial));
   }
 
-  searchChampion(String value) {
-    final championFiltered = state.listChampions!.where((champion) {
-      final championName = champion.name!.toLowerCase();
-      return championName.contains(value);
-    }).toList();
-    emit(state.copyWith(filterListChampios: championFiltered));
+  void searchChampion(String query) {
+    final trimmedQuery = query.trim().toLowerCase();
+    if (trimmedQuery.isEmpty) {
+      emit(state.copyWith(filterListChampios: state.listChampions));
+      return;
+    }
+
+    final filteredChampions = state.listChampions!
+        .where((champion) =>
+            champion.name != null &&
+            champion.name!.toLowerCase().contains(trimmedQuery))
+        .toList();
+
+    emit(state.copyWith(filterListChampios: filteredChampions));
   }
 }

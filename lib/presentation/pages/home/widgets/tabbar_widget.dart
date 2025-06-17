@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lol_app/app/utils/colors_app.dart';
 import 'package:lol_app/app/utils/font_app.dart';
 
@@ -16,11 +15,11 @@ class TabBarWidget extends StatelessWidget {
       indicatorSize: TabBarIndicatorSize.label,
       unselectedLabelColor: Colors.white,
       unselectedLabelStyle: TextStyle(
-        fontSize: 15.spMin,
+        fontSize: 15,
         fontFamily: FontFamilyApp.medium,
       ),
       labelStyle: TextStyle(
-        fontSize: 15.spMin,
+        fontSize: 15,
         fontFamily: FontFamilyApp.medium,
       ),
       tabs: List.generate(
